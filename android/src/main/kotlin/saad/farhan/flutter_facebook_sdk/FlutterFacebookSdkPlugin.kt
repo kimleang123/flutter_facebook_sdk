@@ -40,7 +40,7 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
     private lateinit var logger: AppEventsLogger
 
 
-    private var deepLinkUrl: String = "Saad Farhan"
+    private var deepLinkUrl: String = ""
     private var PLATFORM_CHANNEL: String = "flutter_facebook_sdk/methodChannel"
     private var EVENTS_CHANNEL: String = "flutter_facebook_sdk/eventChannel"
     private var queuedLinks: List<String> = emptyList()
@@ -85,7 +85,12 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
                 result.success("Android ${android.os.Build.VERSION.RELEASE}")
             }
             "getDeepLinkUrl" -> {
-                result.success(deepLinkUrl)
+                if(deepLinkUrl == ""){
+                  val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
+                  result.success(targetUri.toString())
+                } else {
+                  result.success(deepLinkUrl)
+                }
             }
             "logViewedContent", "logAddToCart", "logAddToWishlist" -> {
                 val args = call.arguments as HashMap<String, Any>
