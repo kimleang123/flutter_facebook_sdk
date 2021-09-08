@@ -87,7 +87,9 @@ class FlutterFacebookSdkPlugin : FlutterPlugin, MethodCallHandler, StreamHandler
             "getDeepLinkUrl" -> {
                 if(deepLinkUrl == ""){
                   val targetUri = AppLinks.getTargetUrlFromInboundIntent(context, activityPluginBinding!!.activity.intent)
-                  result.success(targetUri.toString())
+                  if(targetUri != null){
+                    result.success(targetUri.toString())
+                  }
                 } else {
                   result.success(deepLinkUrl)
                 }
